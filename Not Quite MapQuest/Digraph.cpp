@@ -5,6 +5,7 @@
 
 unsigned int Digraph::noVertices()
 {
+
 }
 
 unsigned int Digraph::noEdges()
