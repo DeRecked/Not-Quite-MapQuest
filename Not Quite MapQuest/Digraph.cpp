@@ -3,31 +3,30 @@
 
 #include "Digraph.hpp"
 
-unsigned int Digraph::noVertices()
-{
+unsigned int Digraph::noVertices() {
 
 }
 
-unsigned int Digraph::noEdges()
-{
+unsigned int Digraph::noEdges() {
+
 }
 
-void Digraph::resetEdges()
-{
+void Digraph::resetEdges() {
+
 }
 
-void Digraph::addEdge(int source, int dest, int wt)
-{
+void Digraph::addEdge(int source, int dest, int wt) {
+
 }
 
-void Digraph::delEdge(int source, int dest)
-{
+void Digraph::delEdge(int source, int dest) {
+
 }
 
-int Digraph::isEdge(int source, int dest)
-{
+int Digraph::isEdge(int source, int dest) {
+
 }
 
-int Digraph::dijkstra(int source, int dest)
-{
+int Digraph::dijkstra(int source, int dest) {
+
 }
