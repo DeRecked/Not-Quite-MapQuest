@@ -5,29 +5,32 @@
 #include "Digraph.hpp"
 
 unsigned int Digraph::noVertices() {
-
+	return numberOfVertices;
 }
 
 unsigned int Digraph::noEdges() {
-
+	return numberOfEdges;
 }
 
 void Digraph::resetEdges() {
 	// Fill each vector element with max int value to represent infinity
 	for (int i = 0; i < numberOfVertices; i++)
 		for (int j = 0; j < numberOfVertices; j++)
-			distMatrix[i][j] = INT_MAX;
+			if (i == j) distMatrix[i][j] = 0;
+			else distMatrix[i][j] = INT_MAX;
 }
 
 void Digraph::addEdge(int source, int dest, int wt) {
 	// Add distance to distance matrix; increment number of edges 
-	distMatrix[source][dest] = wt;
+	if (source == dest) distMatrix[source][dest] = 0;
+	else distMatrix[source][dest] = wt;
 	numberOfEdges++;
 }
 
 void Digraph::delEdge(int source, int dest) {
 	// Remove distance from distance matrix; decrement number of edges
-	distMatrix[source][dest] = INT_MAX;
+	if (source == dest) distMatrix[source][dest] = 0;
+	else distMatrix[source][dest] = INT_MAX;
 	numberOfEdges--;
 }
 
