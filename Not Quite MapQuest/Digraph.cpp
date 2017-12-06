@@ -2,6 +2,7 @@
 // c. 2017 T. O'Neil
 
 #include <climits>
+#include <map>
 #include "Digraph.hpp"
 
 unsigned int Digraph::noVertices() {
@@ -18,18 +19,21 @@ void Digraph::resetEdges() {
 	// Fill each vector element with max int value to represent infinity
 	for (int i = 0; i < numberOfVertices; i++)
 		for (int j = 0; j < numberOfVertices; j++)
-			distMatrix[i][j] = INT_MAX;
+			if (i == j) distMatrix[i][j] = 0;
+			else distMatrix[i][j] = INT_MAX;
 }
 
 void Digraph::addEdge(int source, int dest, int wt) {
 	// Add distance to distance matrix; increment number of edges 
-	distMatrix[source][dest] = wt;
+	if (source == dest) distMatrix[source][dest] = 0;
+	else distMatrix[source][dest] = wt;
 	numberOfEdges++;
 }
 
 void Digraph::delEdge(int source, int dest) {
 	// Remove distance from distance matrix; decrement number of edges
-	distMatrix[source][dest] = INT_MAX;
+	if (source == dest) distMatrix[source][dest] = 0;
+	else distMatrix[source][dest] = INT_MAX;
 	numberOfEdges--;
 }
 
@@ -40,66 +44,60 @@ int Digraph::isEdge(int source, int dest) {
 
 int Digraph::dijkstra(int source, int dest) {
 
-	std::vector<bool> path(numberOfVertices);
-	std::vector<int> distance(numberOfVertices);
-	int min, min_index;
-					
-	for (int i = 0; i < numberOfVertices; i++)
-		distance[i] = INT_MAX, path[i] = false;
+	// Store path from source to dest
+	std::vector<int> path;
+	// Record the previous vertex
+	std::vector<int> prev;
 
-	distance[source] = 0;
+	// Mark source as VISITED
 
-	for (int count = 0; count < numberOfVertices - 1; count++)	{
-		for (int v = 0; v < numberOfVertices; v++)
-			if (path[v] == false && distance[v] <= INT_MAX)
-				min = distance[v], min_index = v;
-
-		path[min_index] = true;
-
-		for (int v = 0; v < numberOfVertices; v++)
-			if (!path[v] && distMatrix[min_index][v] && distance[min_index] != INT_MAX
-				&& distance[min_index] + distMatrix[min_index][v] < distance[v])
-				distance[v] = distance[min_index] + distMatrix[min_index][v];
-	}
-
-	for (int i = 0; i < distance.size(); i++)
-		cout << "distance[" << i << "] = " << distance[i] << endl;
-
-	return distance[dest];
+	// WHILE verticies in vector::vertex have not been visited:
+		// Find vertex u with smallest weight
+		// Mark as VISITED
+		// FOR EACH neighbor v of u:
+			// wtSum = dist(u) + isEdge(u,v)
+			// IF wtSum < dist(u):
+				// dist[v] = wtSum;
+				// prev[v] = u;
+			//
+		//
+	//
 }
 
 //int Digraph::dijkstra(int source, int dest) {
 //
-//	std::vector<int> distance(numberOfVertices);
-//	std::vector<int> previous(numberOfVertices);
-//	int minDistance = INT_MAX;
-//	int closestVertex;
-//	int count = 0;
+//	std::map<int, int> history;	
+//	int location = source, nextVertex = 0, shortestDistance = INT_MAX, wtSum = 0;
 //
+//	// Add source to history map
+//	history[source] = 0;
+//
+//	// Mark source as VISITED
 //	vertex[source]->setStatus(VISITED);
-//
-//	for (int i = 0; i < numberOfVertices; i++)
-//		distance[i] = INT_MAX;
-//
-//	while (count < numberOfVertices) {
+//	
+//	// While dest is not yet reached
+//	while (location != dest) {
 //		for (int i = 0; i < numberOfVertices; i++) {
-//			if ((vertex[i]->getStatus() == NOT_VISITED) && (minDistance >= distance[i])) {
-//				minDistance = distance[i];
-//				closestVertex = i;
-//			}
+//			if (distMatrix[source][i] < shortestDistance && distMatrix[source][i] != 0)
+//				shortestDistance = distMatrix[source][i];
+//			nextVertex = i;
 //		}
 //
-//		vertex[closestVertex]->setStatus(VISITED);
+//		// Add next vertex to history map
+//		history[nextVertex] = distMatrix[source][nextVertex];
+//		
+//		// Mark next vertex as VISITED
+//		vertex[nextVertex]->setStatus(VISITED);
+//		
+//		// Sum weight from source to current location
+//		for (auto iter = history.begin(); iter != history.end(); ++iter)
+//			wtSum += iter->second;
 //
-//		for (int i = 0; i < numberOfVertices; i++) {
-//			if (vertex[i]->getStatus() == NOT_VISITED) {
-//				if (distance[i] > distance[closestVertex] + distMatrix[closestVertex][i]) {
-//					distance[i] = distance[closestVertex] + distMatrix[closestVertex][i];
-//					previous[i] = closestVertex;
-//				}
-//			}
-//		}
-//		count++;
+//		// If sum < previous known weight, go back
+//		if (wtSum < shortestDistance)
+//			shortestDistance = wtSum;
 //	}
-//	return distance[dest];
+//
+//	// Return new distance from source to dest
+//	return shortestDistance;
 //}
