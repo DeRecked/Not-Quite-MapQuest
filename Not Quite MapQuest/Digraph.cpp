@@ -5,6 +5,8 @@
 #include <map>
 #include "Digraph.hpp"
 
+#define V 8
+
 unsigned int Digraph::noVertices() {
 	// Return total number of verticies
 	return numberOfVertices;
@@ -42,62 +44,50 @@ int Digraph::isEdge(int source, int dest) {
 	return distMatrix[source][dest];
 }
 
-int Digraph::dijkstra(int source, int dest) {
+int minDistance(std::vector<int> dist, std::vector<bool> sptSet, int size) {
+	// Initialize min value
+	int min = 9999, min_index;
 
-	// Store path from source to dest
-	std::vector<int> path;
-	// Record the previous vertex
-	std::vector<int> prev;
+	for (int v = 0; v < size; v++)
+		if (sptSet[v] == false && dist[v] <= min)
+			min = dist[v], min_index = v;
 
-	// Mark source as VISITED
-
-	// WHILE verticies in vector::vertex have not been visited:
-		// Find vertex u with smallest weight
-		// Mark as VISITED
-		// FOR EACH neighbor v of u:
-			// wtSum = dist(u) + isEdge(u,v)
-			// IF wtSum < dist(u):
-				// dist[v] = wtSum;
-				// prev[v] = u;
-			//
-		//
-	//
+	return min_index;
 }
 
-//int Digraph::dijkstra(int source, int dest) {
-//
-//	std::map<int, int> history;	
-//	int location = source, nextVertex = 0, shortestDistance = INT_MAX, wtSum = 0;
-//
-//	// Add source to history map
-//	history[source] = 0;
-//
-//	// Mark source as VISITED
-//	vertex[source]->setStatus(VISITED);
-//	
-//	// While dest is not yet reached
-//	while (location != dest) {
-//		for (int i = 0; i < numberOfVertices; i++) {
-//			if (distMatrix[source][i] < shortestDistance && distMatrix[source][i] != 0)
-//				shortestDistance = distMatrix[source][i];
-//			nextVertex = i;
-//		}
-//
-//		// Add next vertex to history map
-//		history[nextVertex] = distMatrix[source][nextVertex];
-//		
-//		// Mark next vertex as VISITED
-//		vertex[nextVertex]->setStatus(VISITED);
-//		
-//		// Sum weight from source to current location
-//		for (auto iter = history.begin(); iter != history.end(); ++iter)
-//			wtSum += iter->second;
-//
-//		// If sum < previous known weight, go back
-//		if (wtSum < shortestDistance)
-//			shortestDistance = wtSum;
-//	}
-//
-//	// Return new distance from source to dest
-//	return shortestDistance;
-//}
+int Digraph::dijkstra(int source, int dest) {
+	std::vector<int> dist(numberOfVertices);     // The output array.  dist[i] will hold the shortest
+					 // distance from src to i
+
+	std::vector<bool> sptSet(numberOfVertices); // sptSet[i] will true if vertex i is included in shortest
+					// path tree or shortest distance from src to i is finalized
+
+					// Initialize all distances as INFINITE and stpSet[] as false
+	for (int i = 0; i < numberOfVertices; i++)
+		dist[i] = 9999, sptSet[i] = false;
+
+	// Distance of source vertex from itself is always 0
+	dist[source] = 0;
+
+	// Find shortest path for all vertices
+	for (int count = 0; count < numberOfVertices - 1; count++)
+	{
+		// Pick the minimum distance vertex from the set of vertices not
+		// yet processed. u is always equal to src in first iteration.
+		int u = minDistance(dist, sptSet, numberOfVertices);
+
+		// Mark the picked vertex as processed
+		sptSet[u] = true;
+
+		// Update dist value of the adjacent vertices of the picked vertex.
+		for (int v = 0; v < numberOfVertices; v++)
+
+			// Update dist[v] only if is not in sptSet, there is an edge from 
+			// u to v, and total weight of path from src to  v through u is 
+			// smaller than current value of dist[v]
+			if (!sptSet[v] && distMatrix[u][v] && dist[u] != 9999
+				&& dist[u] + distMatrix[u][v] < dist[v])
+				dist[v] = dist[u] + distMatrix[u][v];
+	}
+	return dist[dest];
+}
