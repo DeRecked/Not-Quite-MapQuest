@@ -35,7 +35,12 @@ protected:
    std::vector< std::vector< int > > distMatrix;
 
 public:
-
+   
+   ~Digraph() {
+	   for (int i = 0; i < vertex.size(); i++)
+		   delete vertex[i]; 
+   }
+   
    void addVertex(string s) {
 	   Node* n = new Node(s);
 	   vertex.push_back(n);
