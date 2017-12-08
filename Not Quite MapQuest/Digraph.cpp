@@ -56,23 +56,29 @@ int Digraph::dijkstra(int source, int dest) {
 		int min = INF, minIndex;
 
 		// Find the vertex with the shortest distance
-		for (int v = 0; v < numberOfVertices; v++)
-			if (vertex[v]->getStatus() == NOT_VISITED && shortestPath[v] <= min) {
-				min = shortestPath[v];
-				minIndex = v;
+		for (int i = 0; i < numberOfVertices; i++)
+			if (vertex[i]->getStatus() == NOT_VISITED && shortestPath[i] <= min) {
+				min = shortestPath[i];
+				minIndex = i;
 			}
-		int u = minIndex;
-		vertex[u]->setStatus(VISITED);
+		// Update index for shortestPath
+		int j = minIndex;
+		// Vertex marked as VISITED
+		vertex[j]->setStatus(VISITED);
 
-		for (int v = 0; v < numberOfVertices; v++)
-			if (vertex[v]->getStatus() == NOT_VISITED && distMatrix[u][v] && shortestPath[u] != INF
-				&& shortestPath[u] + distMatrix[u][v] < shortestPath[v])
-				shortestPath[v] = shortestPath[u] + distMatrix[u][v];
+		// Update distance values at new vertex
+		for (int i = 0; i < numberOfVertices; i++)
+			// If i has not been visited, is connected to the vertex, and is less than shortestPath so far...
+			if (vertex[i]->getStatus() == NOT_VISITED && distMatrix[j][i] && shortestPath[j] != INF
+				&& shortestPath[j] + distMatrix[j][i] < shortestPath[i])
+				// Update shortestPath with new distance
+				shortestPath[i] = shortestPath[j] + distMatrix[j][i];
 	}
 
 	// Reset all verticies back to NOT_VISITED
 	for (int i = 0; i < vertex.size(); i++)
 		vertex[i]->setStatus(NOT_VISITED);
 
+	// Return shortest path from source to dest
 	return shortestPath[dest];
 }
