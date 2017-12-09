@@ -1,6 +1,7 @@
 // Digraph.cpp -- directed graph class
 // c. 2017 T. O'Neil
 
+#include <iostream>
 #include "Digraph.hpp"
 
 #define INF 2000000000
