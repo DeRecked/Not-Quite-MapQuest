@@ -67,7 +67,7 @@ int Digraph::dijkstra(int source, int dest) {
 
 		// Update distance values at new vertex
 		for (int w = 0; w < numberOfVertices; w++) {
-			// If i has not been visited, is connected to the vertex, and is less than shortestPath so far...
+			// If w has not been visited, is connected to the vertex, and is less than shortestPath so far...
 			if (vertex[w]->getStatus() == NOT_VISITED && isEdge(w, v) && shortestPath[v] != INF
 				&& shortestPath[v] + isEdge(v, w) < shortestPath[w])
 				// Update shortestPath with new distance
@@ -78,6 +78,6 @@ int Digraph::dijkstra(int source, int dest) {
 	for (int i = 0; i < vertex.size(); i++)
 		vertex[i]->setStatus(NOT_VISITED);
 
-	// Return shortest path from source to dest
+// Return shortest path from source to dest
 	return shortestPath[dest];
 }
