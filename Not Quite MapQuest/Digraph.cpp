@@ -1,7 +1,6 @@
 // Digraph.cpp -- directed graph class
 // c. 2017 T. O'Neil
 
-#include <iostream>
 #include "Digraph.hpp"
 
 #define INF 2000000000
@@ -50,19 +49,21 @@ int Digraph::dijkstra(int source, int dest) {
 	// Source has distance of zero
 	shortestPath[source] = 0;
 
-	// Find shortest path for all verticies
-	for (int i = 0; i < numberOfVertices - 1; i++) {
+	// Find shortest path for all vertices from source
+	for (int i = 0; i < numberOfVertices-1; i++) {
 		int min = INF, v;
 
 		// Find the next vertex with the shortest distance
 		for (int j = 0; j < numberOfVertices; j++) {
+			// If vertex has not been visited and shortestPath <= current min
 			if (vertex[j]->getStatus() == NOT_VISITED && shortestPath[j] <= min) {
+				// Update min
 				min = shortestPath[j];
-				// v <- index to shortest path
+				// v <- index to shortest path (min)
 				v = j;
 			}
 		}
-		// Vertex marked as VISITED
+		// Next vertex marked as VISITED
 		vertex[v]->setStatus(VISITED);
 
 		// Update distance values at new vertex
@@ -78,6 +79,6 @@ int Digraph::dijkstra(int source, int dest) {
 	for (int i = 0; i < vertex.size(); i++)
 		vertex[i]->setStatus(NOT_VISITED);
 
-// Return shortest path from source to dest
+	// Return shortest path from source to dest
 	return shortestPath[dest];
 }
